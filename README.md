@@ -32,7 +32,7 @@ Install Kafka from https://kafka.apache.org/downloads
     - ./bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic library-topic
     
 2. See the newly created topic:
-    - ./bin/kafka-topics.sh --list --zookeeper localhost:2181
+    - ./bin/kafka-topics.sh --list --zookeeper localhost:2181 (OR) ./bin/kafka-topics.sh --list --bootstrap-server localhost:9092
         - should see the output as: _library-topic_
     - ./bin/kafka-topics.sh --describe --zookeeper localhost:2181
         - should see the details of replicas and partitions of all topics

@@ -1,5 +1,5 @@
-# Kafka-App
-App with Kafka Message Publisher and Consumer
+# Library-App
+Library App with Kafka Message Publisher and Consumer
 
 ### ZooKeeper
 Install ZooKeeper from https://zookeeper.apache.org/releases.html

@@ -13,10 +13,10 @@ import java.util.concurrent.TimeUnit
 @SpringBootApplication
 object KafkaApplication {
 
-    @Value(value = "\${book.topic.name}")
+    @Value(value = "\${library.kafka.books.topic.name}")
     private val bookTopicName: String? = null
 
-    @Value(value = "\${library.topic.name}")
+    @Value(value = "\${library.kafka.library.topic.name}")
     private val libraryTopicName: String? = null
 
     @Autowired

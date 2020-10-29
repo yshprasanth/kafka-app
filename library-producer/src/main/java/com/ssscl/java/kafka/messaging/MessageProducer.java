@@ -15,11 +15,12 @@ public class MessageProducer<T> {
 
     public MessageProducer(final KafkaTemplate<String, T> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
+        System.out.println("created MessageProducer, " + kafkaTemplate + "," + kafkaTemplate.getDefaultTopic());
     }
 
     public void sendMessage(final T message) {
 
-        final ListenableFuture<SendResult<String, T>> future = kafkaTemplate.send(kafkaTemplate.getDefaultTopic(), message);
+        final ListenableFuture<SendResult<String, T>> future = kafkaTemplate.sendDefault("key1", message);
 
         future.addCallback(new ListenableFutureCallback<SendResult<String, T>>() {
 

@@ -14,13 +14,13 @@ class MessageConsumer {
     val bookLatch = CountDownLatch(1)
 
 
-    @KafkaListener(topics = ["\${book.topic.name}"], containerFactory = "bookKafkaListenerContainerFactory")
+    @KafkaListener(topics = ["\${library.kafka.book.topic.name}"], containerFactory = "bookKafkaListenerContainerFactory")
     fun bookListener(book: Book) {
         println("Received book message: $book")
         bookLatch.countDown()
     }
 
-    @KafkaListener(topics = ["\${library.topic.name}"], containerFactory = "libraryKafkaListenerContainerFactory")
+    @KafkaListener(topics = ["\${library.kafka.library.topic.name}"], containerFactory = "libraryKafkaListenerContainerFactory")
     fun libraryListener(library: Library) {
         println("Received library message: $library")
         libraryLatch.countDown()

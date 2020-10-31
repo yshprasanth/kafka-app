@@ -21,11 +21,11 @@ import org.springframework.kafka.support.serializer.JsonSerializer
 open class LibraryProducerConfig {
 
     @Autowired
-    private lateinit var kafkaTopicConfig: KafkaTopicConfig;
+    private lateinit var libraryTopicConfig: LibraryTopicConfig;
 
     fun producerFactory() : ProducerFactory<String, String> {
         val props : MutableMap<String, Any> = HashMap()
-        props.put(BOOTSTRAP_SERVERS_CONFIG, kafkaTopicConfig.bootstrapServer)
+        props.put(BOOTSTRAP_SERVERS_CONFIG, libraryTopicConfig.bootstrapServer)
         props.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer())
         props.put(VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer())
         return DefaultKafkaProducerFactory<String, String>(props)
@@ -38,7 +38,7 @@ open class LibraryProducerConfig {
 
     fun bookProducerFactory() : ProducerFactory<String, Book> {
         val props: MutableMap<String, Any> = HashMap()
-        props.put(BOOTSTRAP_SERVERS_CONFIG, kafkaTopicConfig.bootstrapServer)
+        props.put(BOOTSTRAP_SERVERS_CONFIG, libraryTopicConfig.bootstrapServer)
         props.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer())
         props.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer<Book>())
         return DefaultKafkaProducerFactory<String, Book>(props, StringSerializer(), JsonSerializer<Book>())
@@ -52,7 +52,7 @@ open class LibraryProducerConfig {
 
     fun libraryProducerFactory(): ProducerFactory<String, Library> {
         val props: MutableMap<String, Any> = HashMap()
-        props.put(BOOTSTRAP_SERVERS_CONFIG, kafkaTopicConfig.bootstrapServer)
+        props.put(BOOTSTRAP_SERVERS_CONFIG, libraryTopicConfig.bootstrapServer)
         props.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer())
         props.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer<Library>())
         return DefaultKafkaProducerFactory<String, Library>(props, StringSerializer(), JsonSerializer<Library>())

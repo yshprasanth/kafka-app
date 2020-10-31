@@ -20,14 +20,14 @@ import java.util.HashMap
 open class LibraryConsumerConfig  {
 
     @Autowired
-    lateinit var kafkaTopicConfig: KafkaTopicConfig
+    lateinit var libraryTopicConfig: LibraryTopicConfig
 
     private fun stringConsumerFactory(groupId: String): ConsumerFactory<String, String> {
         val props: MutableMap<String, Any> = HashMap();
-        props.put(BOOTSTRAP_SERVERS_CONFIG, kafkaTopicConfig.bootstrapServer)
+        props.put(BOOTSTRAP_SERVERS_CONFIG, libraryTopicConfig.bootstrapServer)
         props.put(GROUP_ID_CONFIG, groupId)
-        props.put(BOOTSTRAP_SERVERS_CONFIG, kafkaTopicConfig.bootstrapServer)
-        props.put(BOOTSTRAP_SERVERS_CONFIG, kafkaTopicConfig.bootstrapServer)
+        props.put(BOOTSTRAP_SERVERS_CONFIG, libraryTopicConfig.bootstrapServer)
+        props.put(BOOTSTRAP_SERVERS_CONFIG, libraryTopicConfig.bootstrapServer)
         return DefaultKafkaConsumerFactory(props);
     }
 
@@ -40,7 +40,7 @@ open class LibraryConsumerConfig  {
 
     private fun bookConsumerFactory(): ConsumerFactory<String, Book> {
         val props : MutableMap<String, Any> = HashMap()
-        props.put(BOOTSTRAP_SERVERS_CONFIG, kafkaTopicConfig.bootstrapServer)
+        props.put(BOOTSTRAP_SERVERS_CONFIG, libraryTopicConfig.bootstrapServer)
         props.put(GROUP_ID_CONFIG, "book")
         return DefaultKafkaConsumerFactory<String, Book>(props, StringDeserializer(), JsonDeserializer<Book>(Book.javaClass))
     }
@@ -54,7 +54,7 @@ open class LibraryConsumerConfig  {
 
     private fun libraryConsumerFactory(): ConsumerFactory<String, Library> {
         val props : MutableMap<String, Any> = HashMap()
-        props.put(BOOTSTRAP_SERVERS_CONFIG, kafkaTopicConfig.bootstrapServer)
+        props.put(BOOTSTRAP_SERVERS_CONFIG, libraryTopicConfig.bootstrapServer)
         props.put(GROUP_ID_CONFIG, "library")
         return DefaultKafkaConsumerFactory<String, Library>(props, StringDeserializer(), JsonDeserializer<Library>(Library.javaClass))
     }

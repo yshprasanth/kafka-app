@@ -18,7 +18,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 @SpringBootApplication
 @EntityScan(basePackages = {"com.ssscl.kotlin.kafka.config", "java.lang"})
 @ComponentScan(basePackages = {"com.ssscl.kotlin.kafka.config", "java.lang"})
-public class KafkaApplication {
+public class LibraryProducerApplication {
 
     @Value(value = "${library.kafka.books.topic.name}")
     private String bookTopicName;
@@ -35,12 +35,13 @@ public class KafkaApplication {
 
     public static void main(String[] args) throws Exception {
         System.out.println("inside main... ");
-        ConfigurableApplicationContext context = SpringApplication.run(KafkaApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(LibraryProducerApplication.class, args);
 
         MessageProducer<Book> bookMessageProducer = (MessageProducer)context.getBean("bookMessageProducer");
 
         System.out.println("bookMessageProducer bean: " + bookMessageProducer);
         bookMessageProducer.sendMessage(new Book("MyBook"));
+        System.out.println("after sendMessage");
 
         context.close();
     }

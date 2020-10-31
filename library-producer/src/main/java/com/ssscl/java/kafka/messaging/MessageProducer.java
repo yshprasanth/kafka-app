@@ -22,6 +22,7 @@ public class MessageProducer<T> {
 
         final ListenableFuture<SendResult<String, T>> future = kafkaTemplate.sendDefault("key1", message);
 
+        System.out.println("Sent message=[" + message + "]");
         future.addCallback(new ListenableFutureCallback<SendResult<String, T>>() {
 
             public void onSuccess(SendResult<String, T> result) {

@@ -7,11 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.autoconfigure.domain.EntityScan
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.kafka.core.KafkaTemplate
 import java.util.concurrent.TimeUnit
 
 @SpringBootApplication
-object KafkaApplication {
+@EntityScan(basePackages = ["com.ssscl.kotlin.kafka.config", "java.lang"])
+@ComponentScan(basePackages = ["com.ssscl.kotlin.kafka.config", "java.lang"])
+class LibraryConsumerApplication {
 
     @Value(value = "\${library.kafka.books.topic.name}")
     private val bookTopicName: String? = null
@@ -25,13 +30,19 @@ object KafkaApplication {
     @Autowired
     private val libraryKafkaTemplate: KafkaTemplate<String, Library>? = null
 
-    @Throws(Exception::class)
-    @JvmStatic
-    fun main(args: Array<String>) {
-        val context = SpringApplication.run(KafkaApplication::class.java, *args)
-        val messageConsumer: MessageConsumer = context.getBean(MessageConsumer::class.java)
-        messageConsumer.bookLatch.await(10, TimeUnit.SECONDS);
-        messageConsumer.libraryLatch.await(10, TimeUnit.SECONDS);
-        context.close()
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            val context = SpringApplication.run(LibraryConsumerApplication::class.java, *args)
+            val messageConsumer: MessageConsumer = context.getBean(MessageConsumer::class.java)
+            messageConsumer.bookLatch.await(10, TimeUnit.SECONDS);
+            messageConsumer.libraryLatch.await(10, TimeUnit.SECONDS);
+            context.close()
+        }
+    }
+
+    @Bean
+    fun messageConsumer(): MessageConsumer {
+        return MessageConsumer()
     }
 }

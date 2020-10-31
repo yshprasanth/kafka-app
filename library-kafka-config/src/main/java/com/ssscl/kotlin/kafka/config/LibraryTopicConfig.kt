@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 
 @Configuration
-open class KafkaTopicConfig {
+open class LibraryTopicConfig {
 
     @Value(value = "\${library.kafka.bootstrap.server}")
     lateinit var bootstrapServer: String;

@@ -29,11 +29,14 @@ Install Kafka from https://kafka.apache.org/downloads
 1. Execute below command in new terminal
     - cd _kafka-install-location_
     - execute command "jps" to verify the Zookeeper and Kafka daemons are running
-    - ./bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic library-topic
+    - ./bin/kafka-topics.sh --create --topic library-topic --zookeeper localhost:2181 --replication-factor 3 --partitions 5 
     
 2. See the newly created topic:
-    - ./bin/kafka-topics.sh --list --zookeeper localhost:2181 (OR) ./bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+    - ./bin/kafka-topics.sh --list --zookeeper localhost:2181 
+        (OR) 
+      ./bin/kafka-topics.sh --list --bootstrap-server localhost:9092
         - should see the output as: _library-topic_
+    
     - ./bin/kafka-topics.sh --describe --zookeeper localhost:2181
         - should see the details of replicas and partitions of all topics
         
@@ -87,7 +90,7 @@ Install Kafka from https://kafka.apache.org/downloads
 1. Execute below command in new terminal. Creates topic with 3 replicas.
     - cd _kafka-install-location_
     - execute command "jps" to verify the Zookeeper and 3 Kafka daemons are running
-    - ./bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 1 --topic books-topic
+    - ./bin/kafka-topics.sh --create --topic books-topic --zookeeper localhost:2181 --replication-factor 3 --partitions 5
     
 2. See the newly created topic:
     - ./bin/kafka-topics.sh --list --zookeeper localhost:2181
@@ -101,13 +104,17 @@ Install Kafka from https://kafka.apache.org/downloads
     - execute command "jps" to verify the Zookeeper and 3 Kafka daemons are running
     - ./bin/kafka-topics.sh --zookeeper localhost:2181 --alter --topic books-topic --partitions 4 
 
+2. Execute below command in new termainal to set the message retention time
+    - cd _kafka-install-location_
+    - ./bin/kafka-topics.sh --zookeeper localhost:2181 --alter --topic books-topic --config retention.ms=1000
+    
 #### Publish a message to first broker
 1. Execute below in new terminal
     - cd _kafka-install-location_
     - ./bin/kafka-console-producer.sh --broker-list localhost:9092 --topic books-topic
         - keep typing in the terminal to send messages
     
-#### Consume message from any of the three brokers
+#### Consume messages from any of the three brokers
 1. Execute below in new terminal
     - cd _kafka-install-location_
     - ./bin/kafka-console-consumer.sh --bootstrap-server localhost:_9092/9093/9094_ --topic books-topic --from-beginning

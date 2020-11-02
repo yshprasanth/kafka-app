@@ -1,12 +1,8 @@
 package com.ssscl.kafka.common
 
-import java.io.Serializable
+data class Book(var name: String) {
 
-data class Book(val name: String) : Serializable {
-
-    companion object {
-        private val serialVersionUID: Long = 11L
-    }
+    constructor(): this("default")
 
     override fun toString(): String {
         return name;

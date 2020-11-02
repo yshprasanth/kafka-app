@@ -32,7 +32,7 @@ open class LibraryConsumerConfig  {
     }
 
     @Bean
-    open fun stringKafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {
+    fun stringKafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {
         val factory: ConcurrentKafkaListenerContainerFactory<String, String> =  ConcurrentKafkaListenerContainerFactory();
         factory.consumerFactory = stringConsumerFactory("string")
         return factory
@@ -42,11 +42,11 @@ open class LibraryConsumerConfig  {
         val props : MutableMap<String, Any> = HashMap()
         props.put(BOOTSTRAP_SERVERS_CONFIG, libraryTopicConfig.bootstrapServer)
         props.put(GROUP_ID_CONFIG, "book")
-        return DefaultKafkaConsumerFactory<String, Book>(props, StringDeserializer(), JsonDeserializer<Book>(Book.javaClass))
+        return DefaultKafkaConsumerFactory<String, Book>(props, StringDeserializer(), JsonDeserializer<Book>(Book::class.java))
     }
 
     @Bean
-    open fun bookKafkaListenerContainerFactory() : ConcurrentKafkaListenerContainerFactory<String, Book> {
+    fun bookKafkaListenerContainerFactory() : ConcurrentKafkaListenerContainerFactory<String, Book> {
         val factory: ConcurrentKafkaListenerContainerFactory<String, Book> = ConcurrentKafkaListenerContainerFactory();
         factory.consumerFactory = bookConsumerFactory()
         return factory
@@ -56,11 +56,11 @@ open class LibraryConsumerConfig  {
         val props : MutableMap<String, Any> = HashMap()
         props.put(BOOTSTRAP_SERVERS_CONFIG, libraryTopicConfig.bootstrapServer)
         props.put(GROUP_ID_CONFIG, "library")
-        return DefaultKafkaConsumerFactory<String, Library>(props, StringDeserializer(), JsonDeserializer<Library>(Library.javaClass))
+        return DefaultKafkaConsumerFactory<String, Library>(props, StringDeserializer(), JsonDeserializer<Library>(Library::class.java))
     }
 
     @Bean
-    open fun libraryKafkaListenerContainerFactory() : ConcurrentKafkaListenerContainerFactory<String, Library> {
+    fun libraryKafkaListenerContainerFactory() : ConcurrentKafkaListenerContainerFactory<String, Library> {
         val factory: ConcurrentKafkaListenerContainerFactory<String, Library> = ConcurrentKafkaListenerContainerFactory();
         factory.consumerFactory = libraryConsumerFactory()
         return factory

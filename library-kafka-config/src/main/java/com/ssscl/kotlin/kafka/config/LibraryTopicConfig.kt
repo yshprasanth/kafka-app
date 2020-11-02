@@ -27,19 +27,19 @@ open class LibraryTopicConfig {
     }
 
     @Bean
-    open fun kafkaAdmin(): KafkaAdmin? {
+    fun kafkaAdmin(): KafkaAdmin? {
         val configs: MutableMap<String, Any> = HashMap()
         configs.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServer)
         return KafkaAdmin(configs)
     }
 
     @Bean
-    open fun bookTopic(): NewTopic {
+    fun bookTopic(): NewTopic {
         return NewTopic(booksTopicName, NUMBER_OF_PARTITIONS, NUMBER_OF_REPLICATION)
     }
 
     @Bean
-    open fun libraryTopic(): NewTopic {
+    fun libraryTopic(): NewTopic {
         return NewTopic(libraryTopicName, NUMBER_OF_PARTITIONS, NUMBER_OF_REPLICATION)
     }
 }

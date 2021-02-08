@@ -18,8 +18,11 @@ open class LibraryTopicConfig {
     @Value(value = "\${library.kafka.books.topic.name}")
     lateinit var booksTopicName: String;
 
-    @Value(value = "\${library.kafka.library.topic.name}")
-    lateinit var libraryTopicName: String;
+    @Value(value = "\${library.kafka.publisher-org.topic.name}")
+    lateinit var publisherOrgTopicName: String;
+
+    @Value(value = "\${library.kafka.authors.topic.name}")
+    lateinit var authorTopicName: String;
 
     companion object {
         val NUMBER_OF_PARTITIONS = 5;
@@ -39,7 +42,12 @@ open class LibraryTopicConfig {
     }
 
     @Bean
-    fun libraryTopic(): NewTopic {
-        return NewTopic(libraryTopicName, NUMBER_OF_PARTITIONS, NUMBER_OF_REPLICATION)
+    fun publisherOrgTopic(): NewTopic {
+        return NewTopic(publisherOrgTopicName, NUMBER_OF_PARTITIONS, NUMBER_OF_REPLICATION)
+    }
+
+    @Bean
+    fun authorTopic(): NewTopic {
+        return NewTopic(authorTopicName, NUMBER_OF_PARTITIONS, NUMBER_OF_REPLICATION)
     }
 }

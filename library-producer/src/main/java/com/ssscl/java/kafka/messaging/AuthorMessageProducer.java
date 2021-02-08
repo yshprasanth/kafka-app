@@ -1,11 +1,13 @@
 package com.ssscl.java.kafka.messaging;
 
+import com.ssscl.kafka.common.Author;
 import com.ssscl.kafka.common.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
@@ -13,19 +15,19 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Component
-@DependsOn("bookKafkaTemplate")
-public class BookMessageProducer implements Runnable {
+@DependsOn("authorKafkaTemplate")
+public class AuthorMessageProducer implements Runnable {
 
     @Autowired
-    private KafkaTemplate<String, Book> bookKafkaTemplate;
+    private KafkaTemplate<String, Author> authorKafkaTemplate;
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    private final static String BOOK_NAME_PREFIX = "MyBook_";
-    private final static String BOOK_KEY_PREFIX = "Key_";
+    private final static String AUTHOR_NAME_PREFIX = "Mr.";
+    private final static String AUTHOR_KEY_PREFIX = "Key_";
     private final static long THREAD_WAIT_TIME_MILLS = 2000l;
 
-    public BookMessageProducer() {
+    public AuthorMessageProducer() {
     }
 
     public void start() {
@@ -36,17 +38,16 @@ public class BookMessageProducer implements Runnable {
     public void run() {
         while(true) {
             final long currentMillis = System.currentTimeMillis();
-            final String key = BOOK_KEY_PREFIX + currentMillis;
+            final String key = AUTHOR_KEY_PREFIX + currentMillis;
 
-            final Book book = new Book();
-            book.setName(BOOK_NAME_PREFIX + currentMillis);
+            final Author author = new Author();
+            author.setFName(AUTHOR_NAME_PREFIX + currentMillis);
 
-//            final ListenableFuture<SendResult<String, Book>> future = bookKafkaTemplate.sendDefault(key, book);
-            final ListenableFuture<SendResult<String, Book>> future = bookKafkaTemplate.sendDefault(key, book);
+            final ListenableFuture<SendResult<String, Author>> future = authorKafkaTemplate.sendDefault(key, author);
 
-            System.out.println("Sending message=[" + book + "]");
+            System.out.println("Sending message=[" + author + "]");
             future.addCallback(new ListenableFutureCallback<>() {
-                public void onSuccess(SendResult<String, Book> result) {
+                public void onSuccess(SendResult<String, Author> result) {
                     System.out.println("After sending, onSuccess, message=[" + result.getProducerRecord().value() +
                             "] with result=[" + result.getRecordMetadata().topic() + ", " +
                             result.getRecordMetadata().offset() + "," + result.getRecordMetadata().partition() +
@@ -54,7 +55,7 @@ public class BookMessageProducer implements Runnable {
                 }
 
                 public void onFailure(Throwable ex) {
-                    System.out.println("After sending, onFailure, unable to send message=[" + book + "] due to : " + ex.getMessage());
+                    System.out.println("After sending, onFailure, unable to send message=[" + author + "] due to : " + ex.getMessage());
                 }
             });
 

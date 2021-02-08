@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Component
-public class CommandLineComponent implements Runnable {
+public class BooksCommandLineComponent implements Runnable {
 
     private static final String EXIT_COMMAND = "exit";
 

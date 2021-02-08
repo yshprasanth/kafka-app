@@ -1,7 +1,8 @@
 package com.ssscl.kotlin.kafka
 
+import com.ssscl.kafka.common.Author
 import com.ssscl.kafka.common.Book
-import com.ssscl.kafka.common.Library
+import com.ssscl.kafka.common.PublisherOrg
 import com.ssscl.kotlin.kafka.messaging.MessageConsumer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
@@ -19,15 +20,19 @@ class LibraryConsumerApplication {
     private val bookKafkaTemplate: KafkaTemplate<String, Book>? = null
 
     @Autowired
-    private val libraryKafkaTemplate: KafkaTemplate<String, Library>? = null
+    private val publisherOrgKafkaTemplate: KafkaTemplate<String, PublisherOrg>? = null
+
+    @Autowired
+    private val authorKafkaTemplate: KafkaTemplate<String, Author>? = null
 
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
             val context = SpringApplication.run(LibraryConsumerApplication::class.java, *args)
             val messageConsumer: MessageConsumer = context.getBean(MessageConsumer::class.java)
-            messageConsumer.bookLatch.await(10, TimeUnit.SECONDS);
-            messageConsumer.libraryLatch.await(10, TimeUnit.SECONDS);
+            messageConsumer.bookLatch.await(60, TimeUnit.SECONDS);
+            messageConsumer.publisherOrgLatch.await(60, TimeUnit.SECONDS);
+            messageConsumer.authorLatch.await(60, TimeUnit.SECONDS);
             context.close()
         }
     }

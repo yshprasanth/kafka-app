@@ -29,7 +29,10 @@ Install Kafka from https://kafka.apache.org/downloads
 1. Execute below command in new terminal
     - cd _kafka-install-location_
     - execute command "jps" to verify the Zookeeper and Kafka daemons are running
-    - ./bin/kafka-topics.sh --create --topic library-topic --zookeeper localhost:2181 --replication-factor 3 --partitions 5 
+    - ./bin/kafka-topics.sh --create --topic library-topic --zookeeper localhost:2181 --replication-factor 3 --partitions 5
+    - ./bin/kafka-topics.sh --create --topic books-topic --zookeeper localhost:2181 --replication-factor 3 --partitions 5
+    - ./bin/kafka-topics.sh --create --topic author-topic --zookeeper localhost:2181 --replication-factor 3 --partitions 5
+    - ./bin/kafka-topics.sh --create --topic producer-org-topic --zookeeper localhost:2181 --replication-factor 3 --partitions 5
     
 2. See the newly created topic:
     - ./bin/kafka-topics.sh --list --zookeeper localhost:2181 

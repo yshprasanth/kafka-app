@@ -1,11 +1,12 @@
 package com.ssscl.java.kafka.config;
 
+import com.ssscl.kafka.common.Author;
 import com.ssscl.kafka.common.Book;
-import com.ssscl.kafka.common.Library;
+import com.ssscl.kafka.common.PublisherOrg;
+import com.ssscl.kafka.common.serializer.AuthorKafkaSerializer;
 import com.ssscl.kotlin.kafka.config.LibraryTopicConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -26,7 +27,7 @@ public class LibraryProducerConfig {
     @Autowired
     private LibraryTopicConfig libraryTopicConfig;
 
-    public ProducerFactory<String, String> producerFactory() {
+    public ProducerFactory<String, String> stringProducerFactory() {
         final Map<String, Object> props = new HashMap();
         props.put(BOOTSTRAP_SERVERS_CONFIG, libraryTopicConfig.bootstrapServer);
         props.put(KEY_SERIALIZER_CLASS_CONFIG, new StringSerializer());
@@ -36,7 +37,7 @@ public class LibraryProducerConfig {
 
     @Bean
     public KafkaTemplate<String, String> stringKafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+        return new KafkaTemplate<>(stringProducerFactory());
     }
 
     public ProducerFactory<String, Book> bookProducerFactory() {
@@ -54,7 +55,7 @@ public class LibraryProducerConfig {
         return kafkaTemplate;
     }
 
-    public ProducerFactory<String, Library> libraryProducerFactory() {
+    public ProducerFactory<String, PublisherOrg> publisherOrgProducerFactory() {
         final Map<String, Object> props = new HashMap();
         props.put(BOOTSTRAP_SERVERS_CONFIG, libraryTopicConfig.bootstrapServer);
         props.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -63,9 +64,24 @@ public class LibraryProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, Library> libraryKafkaTemplate() {
-        final KafkaTemplate<String, Library> kafkaTemplate = new KafkaTemplate<>(libraryProducerFactory());
-        kafkaTemplate.setDefaultTopic(libraryTopicConfig.libraryTopicName);
+    public KafkaTemplate<String, PublisherOrg> publisherOrgKafkaTemplate() {
+        final KafkaTemplate<String, PublisherOrg> kafkaTemplate = new KafkaTemplate<>(publisherOrgProducerFactory());
+        kafkaTemplate.setDefaultTopic(libraryTopicConfig.publisherOrgTopicName);
+        return kafkaTemplate;
+    }
+
+    public ProducerFactory<String, Author> authorProducerFactory() {
+        final Map<String, Object> props = new HashMap();
+        props.put(BOOTSTRAP_SERVERS_CONFIG, libraryTopicConfig.bootstrapServer);
+        props.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(props, new StringSerializer(), new AuthorKafkaSerializer());
+    }
+
+    @Bean
+    public KafkaTemplate<String, Author> authorKafkaTemplate() {
+        final KafkaTemplate<String, Author> kafkaTemplate = new KafkaTemplate<>(authorProducerFactory());
+        kafkaTemplate.setDefaultTopic(libraryTopicConfig.authorTopicName);
         return kafkaTemplate;
     }
 }

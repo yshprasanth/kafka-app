@@ -1,7 +1,9 @@
 package com.ssscl.java.kafka;
 
 
-import com.ssscl.java.kafka.component.CommandLineComponent;
+import com.ssscl.java.kafka.component.AuthorCommandLineComponent;
+import com.ssscl.java.kafka.component.BooksCommandLineComponent;
+import com.ssscl.java.kafka.messaging.AuthorMessageProducer;
 import com.ssscl.java.kafka.messaging.BookMessageProducer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,10 +17,16 @@ public class LibraryProducerApplication {
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(LibraryProducerApplication.class, args);
 
-        final BookMessageProducer bookMessageProducer = (BookMessageProducer)context.getBean("bookMessageProducer");
-        bookMessageProducer.start();
+//        final BookMessageProducer bookMessageProducer = (BookMessageProducer)context.getBean("bookMessageProducer");
+//        bookMessageProducer.start();
+//
+//        final BooksCommandLineComponent booksCommandLineComponent = (BooksCommandLineComponent) context.getBean("booksCommandLineComponent");
+//        booksCommandLineComponent.start();
 
-        final CommandLineComponent commandLineComponent = (CommandLineComponent) context.getBean("commandLineComponent");
-        commandLineComponent.start();
+        final AuthorMessageProducer authorMessageProducer = (AuthorMessageProducer)context.getBean("authorMessageProducer");
+        authorMessageProducer.start();
+
+        final AuthorCommandLineComponent authorCommandLineComponent = (AuthorCommandLineComponent) context.getBean("authorCommandLineComponent");
+        authorCommandLineComponent.start();
     }
 }

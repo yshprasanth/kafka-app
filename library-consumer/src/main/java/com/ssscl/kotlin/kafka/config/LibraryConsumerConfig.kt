@@ -10,6 +10,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.annotation.EnableKafka
@@ -79,17 +80,22 @@ open class LibraryConsumerConfig  {
         return factory
     }
 
-    private fun authorOrgConsumerFactory(): ConsumerFactory<String, Author> {
+    @Bean("authorConsumerFactory")
+    fun authorConsumerFactory(kafkaProperties: KafkaProperties): ConsumerFactory<String, Author> {
+
         val props : MutableMap<String, Any> = HashMap()
+        props.putAll(kafkaProperties.buildConsumerProperties());
+
         props.put(BOOTSTRAP_SERVERS_CONFIG, libraryTopicConfig.bootstrapServer)
         props.put(GROUP_ID_CONFIG, authorConsumerGroupId)
+
         return DefaultKafkaConsumerFactory<String, Author>(props, StringDeserializer(), AuthorKafkaDeserializer())
     }
 
     @Bean
-    fun authorKafkaListenerContainerFactory() : ConcurrentKafkaListenerContainerFactory<String, Author> {
+    fun authorConcurrentKafkaListenerContainerFactory(kafkaProperties: KafkaProperties) : ConcurrentKafkaListenerContainerFactory<String, Author> {
         val factory: ConcurrentKafkaListenerContainerFactory<String, Author> = ConcurrentKafkaListenerContainerFactory();
-        factory.consumerFactory = authorOrgConsumerFactory()
+        factory.consumerFactory = authorConsumerFactory(kafkaProperties)
         return factory
     }
 }

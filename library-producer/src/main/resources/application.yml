@@ -1,0 +1,22 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    listener:
+      ack-mode: manual_immediate
+    producer:
+      topic: authors-topic
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: com.ssscl.kafka.common.serializer.AuthorKafkaSerializer
+      retries: 3
+      acks: 1
+    consumer:
+      groupId: consumer-main
+      topic: authors-topic
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: com.ssscl.kafka.common.serializer.AuthorKafkaDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: 'com.ssscl.kafka.common'

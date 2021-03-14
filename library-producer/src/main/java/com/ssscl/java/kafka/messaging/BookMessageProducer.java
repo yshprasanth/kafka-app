@@ -19,6 +19,9 @@ public class BookMessageProducer implements Runnable {
     @Autowired
     private KafkaTemplate<String, Book> bookKafkaTemplate;
 
+    @Autowired
+    private KafkaTemplate<String, Book> bookKafkaTemplateWithRetry;
+
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     private final static String BOOK_NAME_PREFIX = "MyBook_";
@@ -34,6 +37,18 @@ public class BookMessageProducer implements Runnable {
 
     @Override
     public void run() {
+        runWithRetry();
+    }
+
+    private void runWithoutRetry() {
+        send(bookKafkaTemplate);
+    }
+
+    private void runWithRetry() {
+        send(bookKafkaTemplateWithRetry);
+    }
+
+    public void send(KafkaTemplate kafkaTemplate) {
         while(true) {
             final long currentMillis = System.currentTimeMillis();
             final String key = BOOK_KEY_PREFIX + currentMillis;

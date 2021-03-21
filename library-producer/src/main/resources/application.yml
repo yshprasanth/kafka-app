@@ -1,3 +1,9 @@
+library:
+  kafka:
+    retry:
+      maxAttempts: 3
+      waitDuration: 10
+      resultWaitDuration: 60
 spring:
   kafka:
     bootstrap-servers: localhost:9092
